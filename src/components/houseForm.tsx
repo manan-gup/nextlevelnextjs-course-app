@@ -3,7 +3,7 @@ import react from "react";
 import { useForm } from "react-hook-form";
 // import { useMutation, gql } from "@apollo/client";
 // import { useRouter } from "next/router";
-// import Link from "next/link";
+import Link from "next/link";
 // import { Image } from "cloudinary-react";
 import { SearchBox } from "./searchBox";
 // import {
@@ -28,6 +28,7 @@ interface IProps {}
 
 export default function HouseForm({}: IProps) {
   const [submitting, setSubmitting] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string>();
   const { register, handleSubmit, setValue, errors, watch } = useForm<
     IFormData
   >({ defaultValues: {} });
@@ -39,7 +40,9 @@ export default function HouseForm({}: IProps) {
     register({ name: "longitude" }, { required: true, min: -180, max: 180 });
   }, [register]);
 
-  const handleCreate = async (data: IFormData) => {};
+  const handleCreate = async (data: IFormData) => {
+    console.log({ data });
+  };
 
   const onSubmit = (data: IFormData) => {
     setSubmitting(true);
@@ -62,9 +65,93 @@ export default function HouseForm({}: IProps) {
           }}
           defaultValue=""
         />
-        {errors.address && <p>{errors.address.message}</p>}
-        <h2>{address}</h2>
+        {errors.address && (
+          <p className="text-red-400">{errors.address.message}</p>
+        )}
+        <h2>{address}</h2> {/*Could be removed later*/}
       </div>
+
+      {address && (
+        <>
+          <div className="mt-4">
+            <label
+              htmlFor="image"
+              className="p-4 border-dashed border-4 border-gray-600 block cursor-pointer"
+            >
+              Click to add image (16:9)
+            </label>
+            <input
+              id="image"
+              name="image"
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              ref={register({
+                validate: (fileList: FileList) => {
+                  if (fileList.length === 1) return true;
+                  return "Please upload a single file.";
+                },
+              })}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                // Theres a dot before accessing array elements if the ? operator
+                //is used to check if not null.
+                if (e?.target?.files?.[0]) {
+                  const file = e.target.files[0];
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setPreviewImage(reader.result as string);
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+            />
+            {previewImage && (
+              <img
+                src={previewImage}
+                alt="Image to be uploaded"
+                className="mt-4 object-cover"
+                style={{ width: "576px", height: `${(9 / 16) * 576}px` }}
+              />
+            )}
+            {errors.image && (
+              <p className="text-red-400">{errors.image.message}</p>
+            )}
+          </div>
+
+          <div className="mt-4">
+            <label htmlFor="bedrooms" className="block">
+              Beds
+            </label>
+            <input
+              type="number"
+              id="bedrooms"
+              name="bedrooms"
+              className="p-2"
+              ref={register({
+                required: "Please enter the number of bedrooms.",
+                max: { value: 10, message: "Woooah, house too big!" },
+                min: { value: 1, message: "Must have at least one bedroom." },
+              })}
+            />
+            {errors.bedrooms && (
+              <p className="text-red-400">{errors.bedrooms.message}</p>
+            )}
+          </div>
+
+          <div className="mt-4">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded"
+              type="submit"
+              disabled={submitting}
+            >
+              Save
+            </button>
+            <Link href="/">
+              <a className="mx-4">Cancel</a>
+            </Link>
+          </div>
+        </>
+      )}
     </form>
   );
 }
