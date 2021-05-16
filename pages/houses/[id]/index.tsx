@@ -3,7 +3,7 @@ import { Image } from "cloudinary-react";
 import { useQuery, gql } from "@apollo/client";
 import Layout from "src/components/layout";
 // import HouseNav from "src/components/houseNav";
-// import SingleMap from "src/components/singleMap";
+import SingleMap from "src/components/singleMap";
 import {
   ShowHouseQuery,
   ShowHouseQueryVariables,
@@ -68,7 +68,9 @@ function HouseData({ id }: { id: string }) {
             />
             <p>{house.bedrooms} 🛏 house</p>
           </div>
-          <div className="sm:w-full md:w-1/2">SingleMap</div>
+          <div className="sm:w-full md:w-1/2">
+            <SingleMap house={house} />
+          </div>
         </div>
       }
     />
