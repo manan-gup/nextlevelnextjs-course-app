@@ -7,14 +7,16 @@ import { useLocalState } from "src/utils/useLocalState";
 // import { HousesQuery_houses } from "src/generated/HousesQuery";
 // import { SearchBox } from "./searchBox";
 
-interface IProps {}
+interface IProps {
+  setDataBounds: (bounds: string) => void;
+}
 
-export default function Map({}: IProps) {
+export default function Map({ setDataBounds }: IProps) {
   const mapRef = useRef<ReactMapGL | null>(null);
   const [viewport, setViewport] = useLocalState<ViewState>("viewport", {
-    latitude: 29,
-    longitude: 77,
-    zoom: 10,
+    latitude: 28.657,
+    longitude: 77.15,
+    zoom: 13,
   });
 
   return (
@@ -29,6 +31,18 @@ export default function Map({}: IProps) {
         minZoom={3}
         maxZoom={18}
         mapStyle="mapbox://styles/leighhalliday/ckhjaksxg0x2v19s1ovps41ef"
+        onLoad={() => {
+          if (mapRef.current) {
+            const bounds = mapRef.current.getMap().getBounds().toArray();
+            setDataBounds(JSON.stringify(bounds));
+          }
+        }}
+        onInteractionStateChange={(extra) => {
+          if (!extra.isDragging && mapRef.current) {
+            const bounds = mapRef.current.getMap().getBounds().toArray();
+            setDataBounds(JSON.stringify(bounds));
+          }
+        }}
       ></ReactMapGL>
     </div>
   );

@@ -1,14 +1,22 @@
 // import { useState } from "react";
 // import { useQuery, gql } from "@apollo/client";
-// import { useDebounce } from "use-debounce";
+import { useDebounce } from "use-debounce";
 import Layout from "src/components/layout";
 import Map from "src/components/map";
 // import HouseList from "src/components/houseList";
 // import { useLastData } from "src/utils/useLastData";
-// import { useLocalState } from "src/utils/useLocalState";
+import { useLocalState } from "src/utils/useLocalState";
 // import { HousesQuery, HousesQueryVariables } from "src/generated/HousesQuery";
 
+type BoundsArray = [[number, number], [number, number]];
+
 export default function Home() {
+  const [dataBounds, setDataBounds] = useLocalState<string>(
+    "bounds",
+    "[[0,0],[0,0]]"
+  );
+  const [debouncedDataBounds] = useDebounce(dataBounds, 200);
+
   return (
     <Layout
       main={
@@ -23,7 +31,7 @@ export default function Home() {
             House List
           </div>
           <div className="w-1/2">
-            <Map />
+            <Map setDataBounds={setDataBounds} />
           </div>
         </div>
       }
