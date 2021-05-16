@@ -20,6 +20,11 @@ const SHOW_HOUSE_QUERY = gql`
       bedrooms
       latitude
       longitude
+      nearby {
+        id
+        latitude
+        longitude
+      }
     }
   }
 `;
@@ -69,7 +74,7 @@ function HouseData({ id }: { id: string }) {
             <p>{house.bedrooms} 🛏 house</p>
           </div>
           <div className="sm:w-full md:w-1/2">
-            <SingleMap house={house} />
+            <SingleMap house={house} nearby={house.nearby} />
           </div>
         </div>
       }
