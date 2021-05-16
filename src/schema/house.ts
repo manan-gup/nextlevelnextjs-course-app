@@ -77,6 +77,13 @@ class House {
 
 @Resolver()
 export class HouseResolver {
+  @Query((_type) => House, { nullable: true })
+  async house(@Arg("id") id: string, @Ctx() ctx: Context) {
+    return ctx.prisma.house.findOne({
+      where: { id: parseInt(id, 10) },
+    });
+  }
+
   @Authorized()
   @Mutation((_returns) => House, { nullable: true })
   async createHouse(
@@ -85,7 +92,7 @@ export class HouseResolver {
   ) {
     return await ctx.prisma.house.create({
       data: {
-        userID: ctx.uid,
+        userId: ctx.uid,
         image: input.image,
         address: input.address,
         latitude: input.coordinates.latitude,
