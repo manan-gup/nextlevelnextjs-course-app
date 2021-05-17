@@ -33,7 +33,7 @@ export default function HouseList({
             <div
               className={
                 highlightedId === house.id
-                  ? `${itemClassList} bg-indigo-900`
+                  ? `${itemClassList} bg-gray-800`
                   : itemClassList
               }
               onMouseEnter={() => setHighlightedId(house.id)}

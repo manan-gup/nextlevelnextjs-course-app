@@ -5,7 +5,7 @@ import ReactMapGL, { Marker, Popup, ViewState } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useLocalState } from "src/utils/useLocalState";
 import { HousesQuery_houses } from "src/generated/HousesQuery";
-// import { SearchBox } from "./searchBox";
+import { SearchBox } from "./searchBox";
 
 interface IProps {
   setDataBounds: (bounds: string) => void;
@@ -53,6 +53,25 @@ export default function Map({
           }
         }}
       >
+        <div className="absolute top-0 w-full z-10 p-4">
+          <SearchBox
+            defaultValue=""
+            onSelectAddress={(_address, latitude, longitude) => {
+              if (latitude && longitude) {
+                setViewport((old) => ({
+                  ...old,
+                  latitude,
+                  longitude,
+                  zoom: 12,
+                }));
+                if (mapRef.current) {
+                  const bounds = mapRef.current.getMap().getBounds().toArray();
+                  setDataBounds(JSON.stringify(bounds));
+                }
+              }
+            }}
+          />
+        </div>
         {houses.map((house) => {
           return (
             <Marker
