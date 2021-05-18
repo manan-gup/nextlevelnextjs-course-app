@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Image } from "cloudinary-react";
 import { HousesQuery_houses } from "src/generated/HousesQuery";
-import { createRef, RefObject, useEffect } from "react";
+import { createRef, RefObject, useEffect, useState } from "react";
 
 interface IProps {
   houses: HousesQuery_houses[];
@@ -17,13 +17,16 @@ export default function HouseList({
   highlightedId,
   setHighlightedId,
 }: IProps) {
+  const [isHouseList, setIsHouseList] = useState<boolean>(false);
+
   useEffect(() => {
-    if (highlightedId) {
+    if (highlightedId && !isHouseList) {
       refs[parseInt(highlightedId) - 1].current?.scrollIntoView({
         behavior: "smooth",
       });
     }
   }, [highlightedId]);
+
   return (
     <>
       {houses.map((house) => {
@@ -36,8 +39,14 @@ export default function HouseList({
                   ? `${itemClassList} bg-gray-800`
                   : itemClassList
               }
-              onMouseEnter={() => setHighlightedId(house.id)}
-              onMouseLeave={() => setHighlightedId(null)}
+              onMouseEnter={() => {
+                setHighlightedId(house.id);
+                setIsHouseList(true);
+              }}
+              onMouseLeave={() => {
+                setHighlightedId(null);
+                setIsHouseList(false);
+              }}
               ref={refs[parseInt(house.id) - 1]}
             >
               <div className="sm:w-full md:w-1/2">
