@@ -64,7 +64,10 @@ export default function SingleMap({ house, nearby }: IProps) {
               offsetTop={-15}
             >
               <Link href={`/houses/${nearbyHouse.id}`}>
-                <a style={{ height: "30px", width: "30px", fontSize: "30px" }}>
+                <a
+                  className="no-hover-effect"
+                  style={{ height: "30px", width: "30px", fontSize: "30px" }}
+                >
                   <img
                     src="/home-solid.svg"
                     alt="Nearby House Marker"

@@ -13,7 +13,7 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
       <nav className="bg-gray-800" style={{ height: "64px" }}>
         <div className="px-6 flex items-center justify-between h-16">
           <Link href="/">
-            <a>
+            <a className="no-hover-effect">
               <img
                 src="/home-color.svg"
                 alt="Home House"
@@ -26,7 +26,9 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
               <Link href="/houses/add">
                 <a>Add House</a>
               </Link>
-              <button onClick={logout}>Logout</button>
+              <button onClick={logout}>
+                <a>Logout</a>
+              </button>
             </>
           ) : (
             <Link href="/auth">

@@ -23,8 +23,17 @@ input {
   border-radius: 5px;
 }
 
+a:hover:not(.no-hover-effect) {
+  opacity: 0.7;
+}
+
 /* Custom Classes */
 
 .marker-active {
   z-index: 1;
+}
+
+.mapboxgl-popup-close-button {
+  padding-right: 0.3rem;
+  font-size: 1.25rem;
 }
