@@ -51,8 +51,6 @@ export default function Home() {
     return <Layout main={<div>Error loading houses.</div>} />;
   }
 
-  console.log(lastData);
-
   return (
     <Layout
       main={

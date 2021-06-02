@@ -31,9 +31,12 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
               </button>
             </>
           ) : (
-            <Link href="/auth">
-              <a>Login / Signup</a>
-            </Link>
+            <>
+              <span>Login to add and edit Houses.</span>
+              <Link href="/auth">
+                <a>Login / Signup</a>
+              </Link>
+            </>
           )}
         </div>
       </nav>
